@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAX logo — variants</title>
+  <style>
+    :root { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: #f4f4f4; color: #111; }
+    h1 { text-align: center; font-weight: 600; padding: 28px 0 2px; margin: 0; }
+    p.sub { text-align: center; color: #666; margin: 0 0 26px; font-size: 14px; }
+    .row { display: flex; flex-wrap: wrap; gap: 22px; justify-content: center; align-items: stretch; padding: 0 24px 22px; }
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 14px rgba(0,0,0,.08);
+            width: 340px; overflow: hidden; display: flex; flex-direction: column; }
+    .card h2 { font-size: 15px; margin: 0; padding: 14px 18px 0; }
+    .card small { display: block; padding: 2px 18px 14px; color: #888; font-size: 12px; min-height: 30px; }
+    .stage { flex: 1; min-height: 200px; display: flex; align-items: center; justify-content: center; }
+    .stage.light { background: #fff; }
+    .stage.dark  { background: #000; }
+    .card.original { outline: 3px solid #111; }
+    .card.original h2 { font-size: 17px; }
+
+    /* logo container: font-size == display width, so children scale in em */
+    .logo { position: relative; display: inline-block; line-height: 0; }
+    .logo img { display: block; width: 1em; height: auto; }
+    .logo.vector { font-size: 250px; }
+    .logo.orig   { font-size: 250px; }
+    .logo.pixel  { font-size: 280px; }
+    .logo.pixel img { image-rendering: pixelated; image-rendering: crisp-edges; }
+    .logo.pixel.invert img { filter: invert(1); }
+  </style>
+</head>
+<body>
+  <h1>NAX logo — all variants</h1>
+  <p class="sub">Original in the middle. Vectors are crisp at any size; pixel versions are a true pixelation of the original.</p>
+
+  <div class="row">
+    <!-- De-pixeled vector WITH ® -->
+    <div class="card">
+      <h2>De-pixeled vector — with ®</h2>
+      <small>nax_logo.svg · clean ® at the original's exact spot, flush straight right border, open top-right gap kept.</small>
+      <div class="stage light">
+        <span class="logo vector"><img src="nax_logo.svg" alt="NAX vector with registered mark" /></span>
+      </div>
+    </div>
+
+    <!-- ORIGINAL (center) -->
+    <div class="card original">
+      <h2>★ Original (reference)</h2>
+      <small>nax_logo.gif · your source logo, unchanged — 205×80.</small>
+      <div class="stage light">
+        <span class="logo orig"><img src="nax_logo.gif" alt="NAX original" /></span>
+      </div>
+    </div>
+
+    <!-- De-pixeled vector NO ® -->
+    <div class="card">
+      <h2>De-pixeled vector — no ®</h2>
+      <small>nax_mark.svg · same clean trace and flush border, registered mark omitted.</small>
+      <div class="stage light">
+        <span class="logo vector"><img src="nax_mark.svg" alt="NAX vector without registered mark" /></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Pixel art, black on white -->
+    <div class="card">
+      <h2>Pixel — black on white</h2>
+      <small>nax_pixel.svg · staircase pixels; "\" diagonals all parallel (~54°), "/" all parallel (~50°), matched to the original; N's left leg is a "/" tied to the left border only; X tied to the right border.</small>
+      <div class="stage light">
+        <span class="logo pixel"><img src="nax_pixel.svg" alt="NAX pixel" /></span>
+      </div>
+    </div>
+
+    <!-- Pixel art, white on black -->
+    <div class="card">
+      <h2>Pixel — white on black</h2>
+      <small>Same blocks, inverted "tech" look.</small>
+      <div class="stage dark">
+        <span class="logo pixel invert"><img src="nax_pixel.svg" alt="NAX pixel inverted" /></span>
+      </div>
+    </div>
+
+    <!-- Anarchy A -->
+    <div class="card">
+      <h2>Anarchy NAX</h2>
+      <small>nax_anarchy.svg · depixeled logo with the A morphed into the anarchy circle-Ⓐ (ring + crossbar through it).</small>
+      <div class="stage light">
+        <span class="logo vector"><img src="nax_anarchy.svg" alt="NAX anarchy" /></span>
+      </div>
+    </div>
+
+    <!-- Animated build-up -->
+    <div class="card">
+      <h2>Build-up animation</h2>
+      <small>nax_build.gif · the pixel logo assembling itself block-by-block, starting at the top-right.</small>
+      <div class="stage light">
+        <span class="logo pixel"><img src="nax_build.gif" alt="NAX build animation" /></span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

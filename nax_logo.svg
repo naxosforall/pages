@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="205.000000pt" height="80.000000pt" viewBox="0 0 205.000000 80.000000"
+ preserveAspectRatio="xMidYMid meet">
+<metadata>
+Created by potrace 1.16, written by Peter Selinger 2001-2019
+</metadata>
+<g transform="translate(0.000000,80.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M21 771 c-11 -7 -14 -61 -12 -302 1 -258 4 -295 18 -306 11 -9 56
+-12 147 -10 l131 2 -4 35 c-1 19 -7 38 -12 41 -5 3 8 41 29 85 21 43 44 94 51
+112 8 17 16 32 20 32 3 0 55 -70 115 -155 l108 -155 54 0 53 0 33 60 33 60
+115 0 115 0 37 -60 37 -60 143 4 c79 2 143 4 144 5 0 1 15 23 32 50 51 78 52
+78 101 5 l44 -65 115 3 115 3 1 28 c1 23 -2 27 -24 27 -39 0 -36 -3 -154 183
+l-36 58 40 54 41 55 94 0 95 0 0 -42 c0 -24 2 -130 3 -237 l2 -194 -917 2
+-918 3 0 -41 0 -41 948 0 c724 0 951 3 960 12 17 17 17 579 0 596 -8 8 -57 12
+-155 12 l-142 0 -42 -55 c-23 -30 -45 -55 -49 -55 -4 0 -25 25 -45 55 l-38 55
+-109 0 -109 0 3 -32 c2 -27 8 -34 30 -36 22 -3 41 -23 94 -99 37 -53 67 -102
+67 -108 0 -7 -19 -40 -43 -74 -39 -56 -47 -62 -74 -59 -28 3 -44 23 -169 206
+l-138 202 -109 0 -110 0 0 -35 c0 -30 3 -35 24 -35 14 0 28 -5 31 -10 10 -16
+-108 -231 -120 -219 -5 5 -55 76 -110 157 l-100 147 -110 0 -110 0 0 -35 c0
+-24 5 -35 15 -36 8 -1 23 -2 33 -3 9 0 17 -7 17 -13 0 -7 -34 -82 -75 -166
+l-75 -153 -52 3 -53 3 0 234 0 234 918 -2 917 -2 0 35 0 35 -112 3 c-267 8
+-1784 7 -1797 -1z m902 -366 l38 -55 -70 0 -71 0 27 55 c15 30 30 55 33 55 3
+-1 22 -25 43 -55z"/>
+</g>
+<!-- clean flush right border, straight; preserves the original's open top-right gap (border runs rows 17-78) -->
+<rect x="184" y="17" width="9" height="55" fill="#000000"/>
+<!-- clean registered-trademark mark, matched to original: ring+R at x196-203,y2-9 (Ø8) -->
+<g fill="#000000">
+<circle cx="199.5" cy="5.6" r="3.7" fill="none" stroke="#000000" stroke-width="1.1"/>
+<text x="199.5" y="7.9" font-family="Helvetica,Arial,sans-serif" font-size="6.4" font-weight="700" text-anchor="middle" fill="#000000">R</text>
+</g>
+</svg>
