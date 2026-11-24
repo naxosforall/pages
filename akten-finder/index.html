@@ -123,7 +123,7 @@ function statusZeile(f){if(f.st==="S")return `Steht im <b>${esc(f.ort.name)}</b>
  if(f.st==="K")return `Liegt in <b>Kiste ${f.ort.kiste}</b> (Keller-Archiv). <a href="#k=${f.ort.kiste}">Kiste anzeigen</a>`;
  if(f.st==="U")return `Laut Rückgabeliste zurück, aber weder auf einem Schrankfoto noch auf einem Kistenzettel gesehen. Wahrscheinlich in einer Kiste ohne Zettel-Foto.`;
  if(f.st==="U2")return `Ordner aus Lieferung 2 (Scan 16.11.2026). Rückgabe nicht dokumentiert.`;
- if(f.st==="F")return `Harth-Ordner. Laut Heinrich (24.11.2026) hat <b>Felix Harth</b> alle Harth-Akten mitgenommen. Bei Bedarf bei Felix anfragen.`;
+ if(f.st==="F")return `Laut Heinrich (24.11.2026) hat <b>Felix Harth</b> alle Harth-Akten und die gemeinsamen Nordendstraße-26-Ordner mitgenommen. Bei Bedarf bei Felix anfragen.`;
  return `Liegt bei <b>Smart-Store</b> (Osterholz-Scharmbeck). ${ST[f.st]}. Für das Original anfordern.`;}
 function overview(s,row,entry){const img=row.foto===2?s.img2:s.img,W=row.foto===2?s.w2:s.w,H=row.foto===2?s.h2:s.h;const sc=100;
  let h=`<div class="ov"><img data-src="${img}" style="max-height:520px">`;
