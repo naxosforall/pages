@@ -22,7 +22,7 @@ main{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:0;min-height
 .item{padding:9px 14px;border-bottom:1px solid #eee;cursor:pointer;display:flex;gap:10px;align-items:flex-start}.item:hover{background:#faf7f2}.item.sel{background:#f3e9e9}
 .nr{font-family:Georgia,serif;font-weight:bold;min-width:46px;color:var(--rot)}.item .t{flex:1;font-size:14px}.item .t small{display:block;color:var(--grau);font-size:12px;margin-top:2px}
 .badge{display:inline-block;font-size:11px;letter-spacing:.04em;padding:2px 7px;border-radius:3px;border:1px solid rgba(0,0,0,.08);white-space:nowrap}
-.st-S{background:var(--s)}.st-K{background:var(--k)}.st-U{background:var(--u)}.st-U2{background:var(--l)}.st-A{background:var(--a)}.st-B{background:var(--b)}.st-C{background:var(--c)}.st-O{background:#eee}
+.st-S{background:var(--s)}.st-K{background:var(--k)}.st-U{background:var(--u)}.st-F{background:#e8e4f5;color:#3b2a7a}.st-U2{background:var(--l)}.st-A{background:var(--a)}.st-B{background:var(--b)}.st-C{background:var(--c)}.st-O{background:#eee}
 .kopf{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}.kopf h2{font-size:26px}.kopf .nr{font-size:30px;min-width:0}
 .ort{font-size:17px;margin:8px 0 12px;padding:10px 12px;background:#fff;border-left:4px solid var(--rot)}
 .meta{color:var(--grau);font-size:13px;margin:4px 0 12px}.meta b{color:var(--ink);font-weight:600}
@@ -59,7 +59,7 @@ mark{background:#ffe9a8}
 <script>
 window.__CFG = {mode:"web", enc:true, salt:"95a16ace134e45b9faec4f9e2913a7f5", pdfBase:""};
 const CFG=window.__CFG; let APP=null, DOCS=null, DOCIDX=null, KEY=null;
-const ST={S:"Im Schrank",K:"In Kiste",U:"Zurück, Standort noch unbekannt",U2:"Lieferung 2 (Verbleib unklar)",A:"Smart-Store · kommt noch (Liste A)",B:"Smart-Store · bleibt dort (Liste B)",C:"Smart-Store · zur Vernichtung vorgesehen (C)"};
+const ST={S:"Im Schrank",K:"In Kiste",U:"Zurück, Standort noch unbekannt",F:"Bei Felix Harth (mitgenommen)",U2:"Lieferung 2 (Verbleib unklar)",A:"Smart-Store · kommt noch (Liste A)",B:"Smart-Store · bleibt dort (Liste B)",C:"Smart-Store · zur Vernichtung vorgesehen (C)"};
 const OBJ={"DHU31-32":"Deutschherrnufer 31–32","DHU31":"Deutschherrnufer 31","DHU32":"Deutschherrnufer 32","WW8-10":"Wasserweg 8–10","WW12-14":"Wasserweg 12–14","No26":"Nordendstraße 26","So46":"Sophienstraße 46","Wur6":"Wurmbachstraße 6","Hoe23":"Höhenweg 23","Roe17":"Römerweg 17","Goe25":"Götzenmühlweg 25","No53":"Nordendstraße 53","Mau12":"Mauerweg 12","Bru2":"Im Brühl 2"};
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/ß/g,"ss");
@@ -123,6 +123,7 @@ function statusZeile(f){if(f.st==="S")return `Steht im <b>${esc(f.ort.name)}</b>
  if(f.st==="K")return `Liegt in <b>Kiste ${f.ort.kiste}</b> (Keller-Archiv). <a href="#k=${f.ort.kiste}">Kiste anzeigen</a>`;
  if(f.st==="U")return `Laut Rückgabeliste zurück, aber weder auf einem Schrankfoto noch auf einem Kistenzettel gesehen. Wahrscheinlich in einer Kiste ohne Zettel-Foto.`;
  if(f.st==="U2")return `Ordner aus Lieferung 2 (Scan 16.11.2026). Rückgabe nicht dokumentiert.`;
+ if(f.st==="F")return `Harth-Ordner. Laut Heinrich (24.11.2026) hat <b>Felix Harth</b> alle Harth-Akten mitgenommen. Bei Bedarf bei Felix anfragen.`;
  return `Liegt bei <b>Smart-Store</b> (Osterholz-Scharmbeck). ${ST[f.st]}. Für das Original anfordern.`;}
 function overview(s,row,entry){const img=row.foto===2?s.img2:s.img,W=row.foto===2?s.w2:s.w,H=row.foto===2?s.h2:s.h;const sc=100;
  let h=`<div class="ov"><img data-src="${img}" style="max-height:520px">`;
@@ -175,7 +176,7 @@ async function zeigeKiste(n){const k=APP.kByNr[n];if(!k)return;const d=$("#detai
  h+='<table><tr><th>Ordner</th><th>Beschriftung</th><th>Digital</th></tr>';for(const nr of k.inhalt){const f=APP.byNr[nr];h+=`<tr class="klick" onclick="location.hash='#o=${nr}'"><td><span class="nr">${nr}</span></td><td>${esc(f?f.b:"(nicht in Liste)")}${f&&f.urteil==="BUERO"?' <span class="badge st-C">Büro</span>':""}</td><td>${f?f.docs+" Reg. · "+f.pages+" S.":""}</td></tr>`;}h+='</table>';
  h+=`<div class="bilder" style="margin-top:14px"><img data-src="${k.img}" title="Zettel / Foto der Kiste"></div>`;d.innerHTML=h;await setImgs(d);d.scrollTop=0;}
 // ---------- Smart-Store
-function listeSmartStore(){let h='';for(const st of ["A","B","C","U","U2"]){const l=APP.folders.filter(f=>f.st===st);h+=`<div class="chips"><span class="on">${esc(ST[st])} · ${l.length}</span></div>`;for(const f of l)h+=itemOrdner(f);}$("#liste").innerHTML=h;}
+function listeSmartStore(){let h='';for(const st of ["A","B","C","U","U2","F"]){const l=APP.folders.filter(f=>f.st===st);h+=`<div class="chips"><span class="on">${esc(ST[st])} · ${l.length}</span></div>`;for(const f of l)h+=itemOrdner(f);}$("#liste").innerHTML=h;}
 function hilfe(){$("#liste").innerHTML='';$("#detail").innerHTML=`<h2>So funktioniert der Akten-Finder</h2>
 <p><b>Suche:</b> Ordnernummer (z. B. 344), Stichwort aus der Beschriftung, Objekt, Mieter oder Thema. Treffer oben = Ordner, darunter = einzelne Register (Dokumente) aus dem Scan mit Kurzfassung.</p>
 <p><b>Volltext:</b> Enter oder Knopf „Volltext“ durchsucht den OCR-Text aller gescannten Seiten (7.900 Register, 243.000 Seiten). Treffer zeigen Ordner, Register und Standort. Mehrere Wörter = alle müssen vorkommen.</p>
