@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Akten-Finder NAX</title>
+<style>
+:root{--rot:#6e1313;--ink:#1a1a1a;--grau:#666;--linie:#d9d4cc;--bg:#f7f5f1;--panel:#fff;--s:#e3f1e5;--k:#fbebcf;--u:#f1e6f6;--a:#dce8f6;--b:#e6e6e6;--c:#f4dce8;--l:#fff3cd}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,"Helvetica Neue",Arial,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:normal;margin:0}
+a{color:var(--rot)}
+header{background:#fff;border-bottom:2px solid var(--rot);padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;position:sticky;top:0;z-index:5}
+header h1{font-size:22px;letter-spacing:.02em}header h1 small{font-family:-apple-system,Arial,sans-serif;font-size:12px;color:var(--grau);margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
+nav{display:flex;gap:4px;flex-wrap:wrap}nav button{background:none;border:1px solid var(--linie);border-radius:4px;padding:5px 10px;font:inherit;cursor:pointer;color:var(--ink)}nav button.on{background:var(--rot);color:#fff;border-color:var(--rot)}
+#such{flex:1 1 320px;display:flex;gap:6px;align-items:center}#such input{flex:1;font:inherit;font-size:16px;padding:7px 10px;border:1px solid #bbb;border-radius:4px}
+#such button{font:inherit;padding:7px 10px;border:1px solid var(--rot);background:#fff;color:var(--rot);border-radius:4px;cursor:pointer}#such button.primary{background:var(--rot);color:#fff}
+main{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:0;min-height:calc(100vh - 60px)}
+#liste{border-right:1px solid var(--linie);background:#fff;overflow:auto;max-height:calc(100vh - 60px)}
+#detail{padding:18px 22px;overflow:auto;max-height:calc(100vh - 60px)}
+@media (max-width:860px){main{grid-template-columns:1fr}#liste{max-height:none;border-right:0;border-bottom:1px solid var(--linie)}#detail{max-height:none;padding:14px 16px}}
+.item{padding:9px 14px;border-bottom:1px solid #eee;cursor:pointer;display:flex;gap:10px;align-items:flex-start}.item:hover{background:#faf7f2}.item.sel{background:#f3e9e9}
+.nr{font-family:Georgia,serif;font-weight:bold;min-width:46px;color:var(--rot)}.item .t{flex:1;font-size:14px}.item .t small{display:block;color:var(--grau);font-size:12px;margin-top:2px}
+.badge{display:inline-block;font-size:11px;letter-spacing:.04em;padding:2px 7px;border-radius:3px;border:1px solid rgba(0,0,0,.08);white-space:nowrap}
+.st-S{background:var(--s)}.st-K{background:var(--k)}.st-U{background:var(--u)}.st-U2{background:var(--l)}.st-A{background:var(--a)}.st-B{background:var(--b)}.st-C{background:var(--c)}.st-O{background:#eee}
+.kopf{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}.kopf h2{font-size:26px}.kopf .nr{font-size:30px;min-width:0}
+.ort{font-size:17px;margin:8px 0 12px;padding:10px 12px;background:#fff;border-left:4px solid var(--rot)}
+.meta{color:var(--grau);font-size:13px;margin:4px 0 12px}.meta b{color:var(--ink);font-weight:600}
+.bilder{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;margin:10px 0}
+.bilder img{max-height:300px;max-width:100%;border:1px solid var(--linie);background:#fff}
+.ov{position:relative;display:inline-block;max-width:100%}.ov img{max-height:520px}.ov .box{position:absolute;border:3px solid #e01b1b;box-shadow:0 0 0 2px rgba(255,255,255,.8);pointer-events:none}
+.ov .hot{position:absolute;cursor:pointer}.ov .hot:hover{outline:2px solid rgba(224,27,27,.7)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:#fff}th,td{text-align:left;padding:5px 8px;border-bottom:1px solid #eee;vertical-align:top}th{background:#f1ede6;font-weight:600}
+tr.klick{cursor:pointer}tr.klick:hover{background:#faf7f2}
+.hinweis{background:var(--l);border:1px solid #e9d99a;padding:8px 12px;font-size:13.5px;margin:8px 0}
+.sec{margin-top:18px}.sec h3{font-size:17px;border-bottom:1px solid var(--linie);padding-bottom:3px;margin-bottom:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 14px}.chips span{font-size:12px;padding:3px 8px;border-radius:12px;border:1px solid var(--linie);cursor:pointer}.chips span.on{background:var(--rot);color:#fff;border-color:var(--rot)}
+.leer{padding:30px 16px;color:var(--grau)}
+.kiste-nr{font-family:Georgia,serif;font-size:64px;line-height:1;color:var(--rot)}
+.legende span{margin-right:10px}
+#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:50}#login form{background:#fff;padding:28px 32px;border-top:4px solid var(--rot);max-width:380px;width:92%}#login input{width:100%;font-size:18px;padding:8px;margin:12px 0}#login button{font:inherit;padding:8px 14px;background:var(--rot);color:#fff;border:0;cursor:pointer}
+mark{background:#ffe9a8}
+.treffer small{color:var(--grau)}
+</style>
+</head>
+<body>
+<div id="login" hidden><form onsubmit="return anmelden(event)"><h2>Akten-Finder NAX</h2><p>Bitte Zugangscode eingeben.</p><input id="code" type="password" autocomplete="current-password" autofocus><button>Öffnen</button><p id="loginfehler" style="color:#b00"></p></form></div>
+<header>
+ <h1>Akten-Finder<small id="stand"></small></h1>
+ <nav id="tabs">
+  <button data-tab="suche" class="on">Suche</button><button data-tab="schraenke">Schränke</button><button data-tab="kisten">Kisten</button><button data-tab="smartstore">Smart-Store</button><button data-tab="hilfe">Hilfe</button>
+ </nav>
+ <div id="such"><input id="q" placeholder="Ordnernummer, Stichwort, Mieter, Objekt …"><button id="bVoll" title="Durchsucht den OCR-Text aller 7.900 gescannten Register">Volltext</button></div>
+</header>
+<main>
+ <div id="liste"></div>
+ <div id="detail"><div class="leer">Suchbegriff eingeben oder links auswählen.</div></div>
+</main>
+<script>
+window.__CFG = {mode:"web", enc:true, salt:"95a16ace134e45b9faec4f9e2913a7f5", pdfBase:""};
+const CFG=window.__CFG; let APP=null, DOCS=null, DOCIDX=null, KEY=null;
+const ST={S:"Im Schrank",K:"In Kiste",U:"Zurück, Standort noch unbekannt",U2:"Lieferung 2 (Verbleib unklar)",A:"Smart-Store · kommt noch (Liste A)",B:"Smart-Store · bleibt dort (Liste B)",C:"Smart-Store · zur Vernichtung vorgesehen (C)"};
+const OBJ={"DHU31-32":"Deutschherrnufer 31–32","DHU31":"Deutschherrnufer 31","DHU32":"Deutschherrnufer 32","WW8-10":"Wasserweg 8–10","WW12-14":"Wasserweg 12–14","No26":"Nordendstraße 26","So46":"Sophienstraße 46","Wur6":"Wurmbachstraße 6","Hoe23":"Höhenweg 23","Roe17":"Römerweg 17","Goe25":"Götzenmühlweg 25","No53":"Nordendstraße 53","Mau12":"Mauerweg 12","Bru2":"Im Brühl 2"};
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/ß/g,"ss");
+const $=s=>document.querySelector(s);
+// ---------- Laden (lokal: Script-Tags; Web: fetch, optional verschlüsselt)
+async function deriveKey(code,saltHex){const enc=new TextEncoder();const base=await crypto.subtle.importKey("raw",enc.encode(code),"PBKDF2",false,["deriveKey"]);const salt=Uint8Array.from(saltHex.match(/../g).map(h=>parseInt(h,16)));return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:150000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);}
+async function loadBytes(path){const r=await fetch(path+(CFG.enc?".enc":""));if(!r.ok)throw new Error("fehlt: "+path);let buf=await r.arrayBuffer();if(CFG.enc){const u=new Uint8Array(buf);buf=await crypto.subtle.decrypt({name:"AES-GCM",iv:u.slice(0,12)},KEY,u.slice(12));}return buf;}
+async function loadJSON(path){if(CFG.mode==="local"){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=path.replace(/\.json$/,".js");s.onload=()=>res(window.__data[path]);s.onerror=()=>rej(new Error(path));document.head.appendChild(s);});}return JSON.parse(new TextDecoder().decode(await loadBytes(path)));}
+const imgCache={};async function imgURL(path){if(!CFG.enc)return path;if(imgCache[path])return imgCache[path];const b=await loadBytes(path);const u=URL.createObjectURL(new Blob([b],{type:"image/jpeg"}));imgCache[path]=u;return u;}
+async function setImgs(root){for(const im of root.querySelectorAll("img[data-src]")){im.src=await imgURL(im.dataset.src);}}
+window.__data={};
+async function anmelden(ev){ev.preventDefault();try{KEY=await deriveKey($("#code").value.trim(),CFG.salt);await start();$("#login").hidden=true;}catch(e){$("#loginfehler").textContent="Code falsch oder Daten nicht erreichbar.";}return false;}
+async function start(){APP=await loadJSON("data/app.json");DOCS=await loadJSON("data/docs.json");DOCIDX={};DOCS.forEach((d,i)=>DOCIDX[d[0]]=i);
+ APP.byNr={};APP.folders.forEach(f=>APP.byNr[f.nr]=f);APP.docsByNr={};DOCS.forEach((d,i)=>{(APP.docsByNr[d[1]]=APP.docsByNr[d[1]]||[]).push(i)});
+ APP.kByNr={};APP.kisten.forEach(k=>APP.kByNr[k.nr]=k);APP.sByKey={};APP.schraenke.forEach(s=>APP.sByKey[s.key]=s);
+ $("#stand").textContent="Stand "+APP.stand+" · "+APP.folders.length+" Ordner · "+DOCS.length+" Register";
+ route();}
+// ---------- Routing
+let TAB="suche";
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{TAB=b.dataset.tab;document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));location.hash="#t="+TAB;zeigeTab();});
+window.addEventListener("hashchange",route);
+function route(){const h=location.hash.slice(1);const p=Object.fromEntries(h.split("&").filter(Boolean).map(x=>{const i=x.indexOf("=");return [x.slice(0,i),decodeURIComponent(x.slice(i+1))]}));
+ if(p.t){TAB=p.t;document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x.dataset.tab===TAB));}
+ zeigeTab();if(p.q){$("#q").value=p.q;suche(p.q);}if(p.o)zeigeOrdner(p.o);if(p.k)zeigeKiste(+p.k);if(p.s)zeigeSchrank(p.s);if(p.d)zeigeDoc(p.d);if(p.b)zeigeBuero(p.b);}
+function zeigeTab(){if(TAB==="suche"){if(!$("#q").value)$("#liste").innerHTML='<div class="leer">Beispiele: <a href="#q=0344">0344</a> · <a href="#q=Bürgschaft">Bürgschaft</a> · <a href="#q=avis">avis</a> · <a href="#q=Mietvertrag Kinessi">Mietvertrag Kinessi</a> · <a href="#q=Nordendstr">Nordendstr</a><br><br>Volltext: Begriff eingeben und „Volltext“ drücken.</div>';}
+ if(TAB==="schraenke")listeSchraenke();if(TAB==="kisten")listeKisten();if(TAB==="smartstore")listeSmartStore();if(TAB==="hilfe")hilfe();}
+// ---------- Suche (Ordner + Register)
+$("#q").addEventListener("input",e=>{clearTimeout(window._t);window._t=setTimeout(()=>{location.hash="#q="+encodeURIComponent(e.target.value)},250)});
+$("#bVoll").onclick=()=>volltext($("#q").value);
+$("#q").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();volltext($("#q").value)}});
+function suche(q){const qs=norm(q).split(/\s+/).filter(Boolean);if(!qs.length)return;const out=[];
+ const nrq=q.trim().match(/^\d{1,4}$/);
+ for(const f of APP.folders){const hay=norm(f.nr+" "+f.b+" "+(OBJ[f.obj]||f.obj)+" "+f.kat+" "+f.zus);
+  let ok=qs.every(t=>hay.includes(t));if(nrq&&f.nr===nrq[0].padStart(4,"0"))ok=true;
+  if(ok){const lab=norm(f.nr+" "+f.b);let sc=qs.reduce((a,t)=>a+(lab.includes(t)?2:0),0)+(nrq&&f.nr.endsWith(nrq[0])?5:0)+(f.st==="S"||f.st==="K"?0.5:0);out.push({typ:"o",f,score:sc});}}
+ const dout=[];for(let i=0;i<DOCS.length&&dout.length<400;i++){const d=DOCS[i];const hay=norm(d[3]+" "+d[5]+" "+d[7]);if(qs.every(t=>hay.includes(t)))dout.push({typ:"d",i});}
+ out.sort((a,b)=>b.score-a.score);
+ let h=`<div class="chips"><span>${out.length} Ordner</span><span>${dout.length}${dout.length>=400?"+":""} Register</span></div>`;
+ for(const o of out.slice(0,150))h+=itemOrdner(o.f);
+ if(dout.length)h+='<div class="chips"><span class="on">Register / Dokumente</span></div>';
+ for(const o of dout.slice(0,200))h+=itemDoc(o.i);
+ if(!out.length&&!dout.length)h='<div class="leer">Nichts gefunden. Volltext versuchen (Enter).</div>';
+ $("#liste").innerHTML=h;}
+function ortKurz(f){if(f.st==="S")return `${f.ort.name}, Reihe ${f.ort.reihe}, Pos. ${f.ort.pos}`;if(f.st==="K")return `Kiste ${f.ort.kiste}`;return ST[f.st];}
+function itemOrdner(f){return `<div class="item" onclick="location.hash='#o=${f.nr}'"><span class="nr">${f.nr}</span><span class="t">${esc(f.b)}<small><span class="badge st-${f.st}">${esc(ortKurz(f))}</span> ${f.docs?f.docs+" Reg. · "+f.pages+" S.":""}</small></span></div>`;}
+function itemDoc(i,extra){const d=DOCS[i];const f=APP.byNr[d[1]];return `<div class="item" onclick="location.hash='#d=${d[0]}'"><span class="nr">${d[1]}<br><small style="font-weight:normal;color:#666">Reg. ${esc(d[2])}</small></span><span class="t">${esc(d[3])} <small>${esc(d[5])} ${esc(d[6])} · ${d[4]} S.${extra?" · "+extra:""}<br>${esc((d[7]||"").slice(0,120))}<br><span class="badge st-${f?f.st:"O"}">${f?esc(ortKurz(f)):"?"}</span> ${f?esc(f.b.slice(0,60)):""}</small></span></div>`;}
+// ---------- Volltext
+const shards={};
+async function shard(k){if(shards[k])return shards[k];try{if(CFG.mode==="local"){shards[k]=await new Promise((res,rej)=>{const s=document.createElement("script");s.src="fts/"+k+".js";s.onload=()=>res(window.__fts[k]||{});s.onerror=()=>res({});document.head.appendChild(s);});}else{try{shards[k]=JSON.parse(new TextDecoder().decode(await loadBytes("fts/"+k+".json")));}catch(e){shards[k]={};}}}catch(e){shards[k]={};}return shards[k];}
+window.__fts={};
+async function volltext(q){const toks=[...new Set(norm(q).replace(/[^a-z0-9\-\. ]/g," ").split(/\s+/).map(t=>t.replace(/^[\.\-]+|[\.\-]+$/g,"")).filter(t=>t.length>=3))];if(!toks.length)return;
+ $("#liste").innerHTML='<div class="leer">Volltext wird durchsucht …</div>';const sets=[];
+ for(const t of toks){const sh=await shard(t.slice(0,2));const m=new Map();if(sh[t])for(const i of sh[t])m.set(i,2);let n=0;for(const term in sh){if(term!==t&&term.startsWith(t)){for(const i of sh[term])if(!m.has(i))m.set(i,1);if(++n>60)break;}}sets.push(m);}
+ let res=null;for(const m of sets){if(res===null){res=m;continue;}const r=new Map();for(const [i,w] of res)if(m.has(i))r.set(i,w+m.get(i));res=r;}
+ const arr=[...res.entries()].sort((a,b)=>b[1]-a[1]).slice(0,300);
+ let h=`<div class="chips"><span class="on">Volltext: ${arr.length}${arr.length>=300?"+":""} Register für „${esc(q)}“</span></div>`;
+ if(!arr.length)h+='<div class="leer">Kein Treffer im OCR-Text. Hinweis: Schreibweise prüfen, kürzere Begriffe versuchen.</div>';
+ for(const [i,w] of arr)h+=itemDoc(i,"Treffer "+w);$("#liste").innerHTML=h;}
+// ---------- Detail: Ordner
+function statusZeile(f){if(f.st==="S")return `Steht im <b>${esc(f.ort.name)}</b>, Reihe ${f.ort.reihe} von oben, Position ${f.ort.pos} von links.`;
+ if(f.st==="K")return `Liegt in <b>Kiste ${f.ort.kiste}</b> (Keller-Archiv). <a href="#k=${f.ort.kiste}">Kiste anzeigen</a>`;
+ if(f.st==="U")return `Laut Rückgabeliste zurück, aber weder auf einem Schrankfoto noch auf einem Kistenzettel gesehen. Wahrscheinlich in einer Kiste ohne Zettel-Foto.`;
+ if(f.st==="U2")return `Ordner aus Lieferung 2 (Scan 16.11.2026). Rückgabe nicht dokumentiert.`;
+ return `Liegt bei <b>Smart-Store</b> (Osterholz-Scharmbeck). ${ST[f.st]}. Für das Original anfordern.`;}
+function overview(s,row,entry){const img=row.foto===2?s.img2:s.img,W=row.foto===2?s.w2:s.w,H=row.foto===2?s.h2:s.h;const sc=100;
+ let h=`<div class="ov"><img data-src="${img}" style="max-height:520px">`;
+ if(entry)h+=`<div class="box" style="left:${entry.x0/W*100}%;top:${row.y0/H*100}%;width:${(entry.x1-entry.x0)/W*100}%;height:${(row.y1-row.y0)/H*100}%"></div>`;
+ for(const r of s.reihen)if(r.foto===row.foto)for(const e of r.eintraege)h+=`<div class="hot" title="${esc(e.nr?e.nr+" "+e.label:e.label)}" onclick="location.hash='${e.nr?"#o="+e.nr:"#b="+s.key+"/"+r.r+"/"+e.pos}'" style="left:${e.x0/W*100}%;top:${r.y0/H*100}%;width:${(e.x1-e.x0)/W*100}%;height:${(r.y1-r.y0)/H*100}%"></div>`;
+ return h+"</div>";}
+function findEntry(f){if(f.st!=="S")return null;const s=APP.sByKey[f.ort.schrank];for(const r of s.reihen)if(r.r===f.ort.reihe)for(const e of r.eintraege)if(e.pos===f.ort.pos)return {s,r,e};return null;}
+async function zeigeOrdner(nr){const f=APP.byNr[nr];if(!f)return;const d=$("#detail");
+ let h=`<div class="kopf"><span class="nr">${f.nr}</span><h2>${esc(f.b)}</h2> <span class="badge st-${f.st}">${esc(ortKurz(f))}</span></div>`;
+ h+=`<div class="ort">${statusZeile(f)}</div>`;
+ h+=`<div class="meta"><b>Objekt:</b> ${esc((f.obj||"").split(" | ").map(o=>OBJ[o]||o).join(", ")||"–")} · <b>Kategorie:</b> ${esc((f.kat||"").replace(/_/g," / "))} · <b>Jahre:</b> ${esc(f.jv||"")}${f.jb&&f.jb!==f.jv?"–"+esc(f.jb):""} · <b>Digital:</b> ${f.docs} Register, ${f.pages} Seiten${f.bis?" · <b>Aufbewahren:</b> "+esc(f.bis):""}${f.seite!=="N"?" · <b>Seite:</b> "+(f.seite==="H"?"Harth":"gemeinsam Nax/Harth"):""}</div>`;
+ if(f.zus)h+=`<p>${esc(f.zus)}</p>`;
+ if(f.urteil){const col=f.urteil==="BUERO"?"st-C":(f.urteil==="KELLER"?"st-S":"st-U");h+=`<div class="hinweis"><span class="badge ${col}">${f.urteil==="BUERO"?"ORIGINALE → bleibt im Büro":(f.urteil==="KELLER"?"KELLER möglich":"PRÜFEN")}</span> <small>Sicherheit ${esc(f.sich||"")}${f.vor1980?" · enthält Unterlagen vor 1980":""}</small><br>${esc(f.ug||"")}`;
+  if(f.originale&&f.originale.length)h+=`<ul style="margin:4px 0 0 18px;padding:0">${f.originale.slice(0,8).map(o=>`<li><b>Reg. ${esc(o.register)}</b> ${esc(o.titel)} — ${esc(o.art)} ${esc(o.datum||"")} ${o.hinweis?"· "+esc(o.hinweis):""}</li>`).join("")}</ul>`;h+='</div>';}
+ else if(f.orig)h+=`<div class="hinweis"><b>Originale laut Dokument-Auswertung:</b> ${esc(f.orig)}</div>`;
+ const fe=findEntry(f);
+ if(fe){h+=`<div class="bilder"><img data-src="${fe.e.img}" title="Rückenschild aus dem Foto vom 24.11.2026">${overview(fe.s,fe.r,fe.e)}</div><div class="meta">Rot markiert: Position im Schrankfoto. Andere Rücken im Foto sind anklickbar.</div>`;}
+ if(f.st==="K"){const k=APP.kByNr[f.ort.kiste];h+=`<div class="bilder"><img data-src="${k.img}" title="Kistenzettel"></div>`;}
+ const regs=APP.docsByNr[f.nr]||[];
+ h+=`<div class="sec"><h3>Inhalt des Ordners (${regs.length} Register, aus dem Scan)</h3>`;
+ if(regs.length){h+='<table><tr><th>Reg.</th><th>Titel</th><th>Seiten</th><th>Dokumenttyp · Datum</th><th>Kurzfassung</th></tr>';for(const i of regs){const x=DOCS[i];h+=`<tr class="klick" onclick="location.hash='#d=${x[0]}'"><td>${esc(x[2])}</td><td>${esc(x[3])}</td><td>${x[4]}</td><td>${esc(x[5])}<br><small>${esc(x[6])}</small></td><td><small>${esc((x[7]||"").slice(0,160))}</small></td></tr>`;}h+='</table>';}
+ else h+='<p class="meta">Kein Scan vorhanden (Ordner war nicht bei Smart-Store oder noch nicht katalogisiert).</p>';
+ h+='</div>';d.innerHTML=h;await setImgs(d);d.scrollTop=0;}
+async function zeigeDoc(id){const i=DOCIDX[id];if(i==null)return;const x=DOCS[i];const f=APP.byNr[x[1]];const d=$("#detail");
+ let h=`<div class="kopf"><span class="nr">${x[1]}</span><h2>${esc(x[3])}</h2></div>`;
+ h+=`<div class="ort"><b>Wo:</b> Ordner ${x[1]} ${f?"— "+esc(f.b):""}<br>${f?statusZeile(f):""}<br><b>Im Ordner:</b> Register ${esc(x[2])} („${esc(x[3])}“), ${x[4]} Seiten.</div>`;
+ h+=`<div class="meta"><b>Dokumenttyp:</b> ${esc(x[5]||"–")} · <b>Datum:</b> ${esc(x[6]||"–")} · <b>Scan-ID:</b> ${esc(x[0])}</div>`;
+ if(x[7])h+=`<p>${esc(x[7])}</p>`;
+ if(CFG.pdfBase)h+=`<p><a href="${CFG.pdfBase}${encodeURI(x[8])}" target="_blank">PDF des Registers öffnen</a> <small class="meta">(nur auf dem Mac mit Archivordner)</small></p>`;
+ h+=`<p><a href="#o=${x[1]}">Zum Ordner ${x[1]} mit allen Registern</a></p>`;
+ if(f){const fe=findEntry(f);if(fe)h+=`<div class="bilder"><img data-src="${fe.e.img}">${overview(fe.s,fe.r,fe.e)}</div>`;if(f.st==="K"){const k=APP.kByNr[f.ort.kiste];h+=`<div class="bilder"><img data-src="${k.img}"></div>`;}}
+ d.innerHTML=h;await setImgs(d);d.scrollTop=0;}
+async function zeigeBuero(ref){const [key,r,pos]=ref.split("/");const s=APP.sByKey[key];const row=s.reihen.find(x=>x.r==r);const e=row.eintraege.find(x=>x.pos==pos);const d=$("#detail");
+ let h=`<div class="kopf"><h2>${esc(e.label)}</h2> <span class="badge st-O">ohne Smart-Store-Nummer</span></div><div class="ort">Steht im <b>${esc(s.name)}</b>, Reihe ${r} von oben, Position ${pos} von links. Nicht gescannt, kein Katalogeintrag.</div>`;
+ h+=`<div class="bilder"><img data-src="${e.img}">${overview(s,row,e)}</div>`;d.innerHTML=h;await setImgs(d);}
+// ---------- Schraenke
+function listeSchraenke(){let h='<div class="chips"><span class="on">11 Schränke</span></div>';for(const s of APP.schraenke){const n=s.reihen.reduce((a,r)=>a+r.eintraege.length,0),m=s.reihen.reduce((a,r)=>a+r.eintraege.filter(e=>e.nr).length,0);h+=`<div class="item" onclick="location.hash='#s=${s.key}'"><span class="t"><b>${esc(s.name)}</b><small>${n} Ordner, davon ${m} mit Nummer</small></span></div>`;}$("#liste").innerHTML=h;}
+async function zeigeSchrank(key){const s=APP.sByKey[key];if(!s)return;const d=$("#detail");let h=`<div class="kopf"><h2>${esc(s.name)}</h2></div><div class="meta">Foto vom 24.11.2026. Rücken anklicken.</div>`;
+ h+=`<div class="bilder">${overview(s,s.reihen[0],null)}${s.img2?overview(s,s.reihen.find(r=>r.foto===2)||s.reihen[0],null):""}</div>`;
+ for(const r of s.reihen){h+=`<div class="sec"><h3>Reihe ${r.r}${r.r===1?" (oben)":""}</h3><table>`;for(const e of r.eintraege){const f=e.nr?APP.byNr[e.nr]:null;h+=`<tr class="klick" onclick="location.hash='${e.nr?"#o="+e.nr:"#b="+key+"/"+r.r+"/"+e.pos}'"><td style="width:30px">${e.pos}</td><td style="width:60px"><span class="nr">${e.nr||"–"}</span></td><td>${esc(f?f.b:e.label)}${e.ev==="unsicher"?' <span class="badge st-U">unsicher</span>':""}</td></tr>`;}h+='</table></div>';}
+ d.innerHTML=h;await setImgs(d);d.scrollTop=0;}
+// ---------- Kisten
+function listeKisten(){let h=`<div class="chips"><span class="on">${APP.kisten.filter(k=>!k.leer).length} Kisten für das Keller-Archiv</span></div>`;for(const k of APP.kisten){if(k.leer){h+=`<div class="item" onclick="location.hash='#k=${k.nr}'"><span class="nr">K ${k.nr}</span><span class="t"><i>aufgelöst, leer</i><small>Inhalt steht im Schrank</small></span></div>`;continue;}const objs=[...new Set(k.inhalt.map(n=>APP.byNr[n]).filter(Boolean).map(f=>OBJ[(f.obj||"").split(" | ")[0]]||(f.obj||"").split(" | ")[0]))].slice(0,3).join(", ");h+=`<div class="item" onclick="location.hash='#k=${k.nr}'"><span class="nr">K ${k.nr}</span><span class="t">${k.inhalt.join(", ")}<small>${esc(objs)}${k.alt_ka.length?" · alte Kartons "+k.alt_ka.join(", "):""}</small></span></div>`;}$("#liste").innerHTML=h;}
+async function zeigeKiste(n){const k=APP.kByNr[n];if(!k)return;const d=$("#detail");let h=`<div class="kopf"><span class="kiste-nr">${k.nr}</span><h2>Kiste ${k.nr}</h2></div>`;
+ h+=k.leer?`<div class="ort">Diese Kiste ist aufgelöst (leer). Die Ordner stehen im Schrank.</div>`:`<div class="ort">${k.inhalt.length} Ordner · alte Kartonnummern der Abholung: ${k.alt_ka.join(", ")||"–"}</div>`;
+ const bue=k.inhalt.filter(n=>APP.byNr[n]&&APP.byNr[n].urteil==="BUERO");if(bue.length)h+=`<div class="hinweis"><b>Vor dem Keller entnehmen (Originale, ins Büro):</b> ${bue.map(n=>`<a href="#o=${n}">${n}</a>`).join(", ")}</div>`;
+ if(k.hinweis)h+=`<div class="hinweis">${esc(k.hinweis)}</div>`;
+ if(k.moved.length)h+=`<div class="hinweis">Laut Zettel auch hier, stehen aber inzwischen im Schrank: ${k.moved.map(n=>`<a href="#o=${n}">${n}</a>`).join(", ")}.</div>`;
+ if(k.elsewhere.length)h+=`<div class="hinweis">Laut Zettel hier, nach Foto in anderer Kiste: ${k.elsewhere.map(([n,kn])=>`${n} → Kiste ${kn}`).join(", ")}.</div>`;
+ h+='<table><tr><th>Ordner</th><th>Beschriftung</th><th>Digital</th></tr>';for(const nr of k.inhalt){const f=APP.byNr[nr];h+=`<tr class="klick" onclick="location.hash='#o=${nr}'"><td><span class="nr">${nr}</span></td><td>${esc(f?f.b:"(nicht in Liste)")}${f&&f.urteil==="BUERO"?' <span class="badge st-C">Büro</span>':""}</td><td>${f?f.docs+" Reg. · "+f.pages+" S.":""}</td></tr>`;}h+='</table>';
+ h+=`<div class="bilder" style="margin-top:14px"><img data-src="${k.img}" title="Zettel / Foto der Kiste"></div>`;d.innerHTML=h;await setImgs(d);d.scrollTop=0;}
+// ---------- Smart-Store
+function listeSmartStore(){let h='';for(const st of ["A","B","C","U","U2"]){const l=APP.folders.filter(f=>f.st===st);h+=`<div class="chips"><span class="on">${esc(ST[st])} · ${l.length}</span></div>`;for(const f of l)h+=itemOrdner(f);}$("#liste").innerHTML=h;}
+function hilfe(){$("#liste").innerHTML='';$("#detail").innerHTML=`<h2>So funktioniert der Akten-Finder</h2>
+<p><b>Suche:</b> Ordnernummer (z. B. 344), Stichwort aus der Beschriftung, Objekt, Mieter oder Thema. Treffer oben = Ordner, darunter = einzelne Register (Dokumente) aus dem Scan mit Kurzfassung.</p>
+<p><b>Volltext:</b> Enter oder Knopf „Volltext“ durchsucht den OCR-Text aller gescannten Seiten (7.900 Register, 243.000 Seiten). Treffer zeigen Ordner, Register und Standort. Mehrere Wörter = alle müssen vorkommen.</p>
+<p><b>Standort:</b> <span class="badge st-S">Im Schrank</span> mit Schrank, Reihe (von oben) und Position (von links) und Foto; <span class="badge st-K">In Kiste</span> mit Kistennummer und Zettelfoto; <span class="badge st-U">Zurück, Standort unbekannt</span> = zurückgeliefert, aber auf keinem Foto; <span class="badge st-A">Smart-Store</span> = Original liegt noch im Lager in Osterholz-Scharmbeck.</p>
+<p><b>Schränke:</b> Gisa 1–6, Zwischenschrank 1–3, Rückseite 1, Tischtennisplatten-Schrank, jeweils mit Foto vom 24.11.2026. Ordner ohne Smart-Store-Nummer (Büro-, Privat- und Steuerordner) sind mit Rückenschild erfasst, aber nicht gescannt.</p>
+<p><b>Kisten:</b> fortlaufend nummeriert 1–${APP.kisten.length} nach den Smart-Store-Zetteln (BK = Ordnernummer, Karton = alte Kartonnummer der Abholung) und den Inhaltsfotos. Zu jeder Kiste gibt es ein Deckblatt.</p>
+<p><b>Links:</b> Jede Ansicht hat eine Adresse (#o=0344, #k=3, #s=TT, #q=avis), die man kopieren und weitergeben kann.</p>
+<p class="meta">Quellen: Smart-Store-Ordnerliste 2608201 (589 Ordner + Lieferung 2), Rückholliste 09.11.2026, Fotos 24.11.2026, Archivkatalog (docs.tsv, Kurzfassungen). Stand ${APP.stand}.</p>`;}
+// ---------- Start
+(async()=>{if(CFG.enc){$("#login").hidden=false;}else{await start();}})();
+</script>
+</body>
+</html>
